@@ -60,6 +60,8 @@ socket.on('connect', function() { //Don't send until we're connected
 });
 ```
 
+---------------------------------------
+
 ### Streaming example
 
 Here is an example of a server that can stream square numbers. A client can connect and send a `start` command which should
@@ -132,6 +134,8 @@ Will output:
 225
 ```
 
+---------------------------------------
+
 ### Sending a single message
 
 JsonSocket has two helper methods that are useful if you just need to send a single message and you don't need the socket
@@ -183,31 +187,64 @@ The messages can be any Javascript object that can be converted to JSON:
 
 ## Extra methods exposed on JsonSocket instances
 
-### JsonSocket.sendSingleMessage(int port, String host, Object message, Function<Error err> callback)
+### JsonSocket.sendSingleMessage(port, host, message, callback)
 
-Sends a single message to `host`:`port` and closes the connection instantly. As soon as the message is sent the `callback`
-function is invoked (if given).
+Sends a single message anc close the connection instantly.
 
-### JsonSocket.sendSingleMessageAndReceive(int port, String host, Object message, Function<Error err, Object message> callback)
+__Arguments__
+
+- port - Port to send the message to.
+- most - Host to send the message to.
+- message - The message to send.
+- callback(err) - Will be called when the message has been sent.
+
+---------------------------------------
+
+### JsonSocket.sendSingleMessageAndReceive(port, host, message, callback)
 
 Sends a single message to `host`:`port`, waits for a response message, and closes the connection right after.
 As soon as the response message is received the `callback` function is invoked (if given) with the response message
 as the second argument.
 
-### socket.sendMessage(Object message, Function<Error err> callback)
+__Arguments__
 
-Sends a message over the socket. `callback` will be called after the message has been sent.
+- port - Port to send the message to.
+- most - Host to send the message to.
+- message - The message to send.
+- callback(err, message) - Will be called when the response message has been received. The response message is given as the second argument.
 
-### socket.sendEndMessage(Object message, Function<Error err> callback)
+---------------------------------------
+
+### socket.sendMessage(message, callback)
+
+Sends a JSON a message over the socket.
+
+__Arguments__
+
+- message - The message to send.
+- callback(err) - Will be called after the message has been sent.
+
+---------------------------------------
+
+### socket.sendEndMessage(message, callback)
 
 Same as `socket.sendMessage`, except that the socket is closed right after the message has been sent using 
 [`net.end()`](http://nodejs.org/api/net.html#net_socket_end_data_encoding).
 
 No more messages can be sent from either the server or client through this socket.
 
-### socket.sendError(Error err, Function<Error err> callback)
+---------------------------------------
+
+### socket.sendError(err, callback)
 
 Convenience method for sending an error as a message. 
+
+__Arguments__
+
+- err - An Error object that should be formatted as a message.
+- callback(err) - Will be called after the message has been sent.
+
+__Example__
 
 ```javascript
 socket.sendError(new Error('Something went wrong!');
@@ -222,16 +259,22 @@ Will send a message of this JSON format:
 }
 ```
 
-`callback` will be called after the message has been sent.
+---------------------------------------
 
-### socket.sendEndError(Error err, Function<Error err> callback)
+### socket.sendEndError(err, callback)
 
 Same as `socket.sendError`, except that the socket is closed right after the message has been sent using 
 [`net.end()`](http://nodejs.org/api/net.html#net_socket_end_data_encoding).
 
 No more messages can be sent from either the server or client through this socket.
 
+---------------------------------------
+
 ### socket.isClosed()
+
+Returns true if either the server or the client has closed the connection. Returns false otherwise.
+
+---------------------------------------
 
 ### Event: 'message' (Object message)
 
