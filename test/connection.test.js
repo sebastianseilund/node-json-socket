@@ -1,5 +1,6 @@
 var assert = require('assert'),
     async = require('async'),
+    net = require('net'),
     JsonSocket = require('../lib/json-socket'),
     helpers = require('./helpers');
 
@@ -124,5 +125,33 @@ describe('JsonSocket connection', function() {
             });
         });
     });
+
+//    it('should buffer message if sent before connected', function(callback) {
+//        helpers.createServer(function(err, server) {
+//            if (err) return callback(err);
+//            var clientSocket = new JsonSocket(new net.Socket());
+//            clientSocket.connect(server.address().port, '127.0.0.1');
+//            clientSocket.on('error', function(err) {
+//                callback(err);
+//            });
+//            async.parallel([
+//                function(callback) {
+//                    clientSocket.sendMessage({type: 'ping'}, callback);
+//                },
+//                function(callback) {
+//                    server.on('connection', function(socket) {
+//                        var serverSocket = new JsonSocket(socket);
+//                        serverSocket.on('message', function(message) {
+//                            assert.deepEqual(message, {type: 'ping'});
+//                            callback();
+//                        });
+//                    });
+//                }
+//            ], function(err) {
+//                if (err) return callback(err);
+//                helpers.closeServer(server, callback);
+//            });
+//        });
+//    });
 
 });
