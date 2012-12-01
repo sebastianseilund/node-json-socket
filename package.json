@@ -1,6 +1,6 @@
 {
     "name": "json-socket",
-    "description": "Write me...",
+    "description": "An easy way to send JSON over TCP using sockets.",
     "main": "./lib/json-socket",
     "author": "Sebastian Seilund",
     "version": "0.1.1",
