@@ -1,2 +1,4 @@
 node-json-socket
 ================
+
+- Decorator
