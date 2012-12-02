@@ -13,6 +13,23 @@ You can install `JsonSocket` using Node Package Manager (npm):
 npm install json-socket
 ```
 
+Or add it to your `package.json` file, like this:
+
+```json
+{
+    ...
+    "dependencies": {
+        "json-socket": "*"
+    }
+    ...
+}
+```
+
+And then run:
+
+```
+npm install
+```
 
 ## Usage
 
@@ -187,6 +204,10 @@ The messages can be any Javascript object that can be converted to JSON:
 
 ## Extra methods exposed on JsonSocket instances
 
+Since `JsonSocket` is a decorator of `net.Socket`, it supports all methods that `net.Socket` supports.
+
+Besides that the following methods and events are also available on `JsonSocket` instances.
+
 ### JsonSocket.sendSingleMessage(port, host, message, callback)
 
 Sends a single message anc close the connection instantly.
@@ -276,9 +297,39 @@ Returns true if either the server or the client has closed the connection. Retur
 
 ---------------------------------------
 
-### Event: 'message' (Object message)
+### Event: 'message'
+
+- message - the message received from the other side.
+
+Emitted when a complete message has been received.
 
 
 ## How the protocol works
 
-Content length, delimited by #
+The `JsonSocket` protocol works by `JSON.stringify`'ing the message and prefixing it with a content length and a content length delimiter (#).
+
+Example:
+
+```javascript
+socket.sendMessage({
+    type: "ping"
+});
+```
+
+Will send a message that looks like this:
+
+```
+15#{"type":"ping"}
+```
+
+
+
+
+
+
+
+
+
+
+
+
