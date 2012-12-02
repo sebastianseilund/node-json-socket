@@ -322,10 +322,12 @@ Will send a message that looks like this:
 15#{"type":"ping"}
 ```
 
+This mechanism ensures that messages that are chunked will be parsed correctly.
 
 
+##Todo
 
-
+- `socket.request()` method, and `request` event. Makes it easier to send multiple requests with callbacks.
 
 
 
