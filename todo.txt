@@ -1,8 +1,6 @@
 - Write Readme.md
+- Travis
 
-- Tests:
--- Connection
--- Parsing, direct use of onData
 
 - Features
 -- Request number, so it's easy to send requests
