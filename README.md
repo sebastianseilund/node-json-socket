@@ -1,6 +1,6 @@
 # JsonSocket [![Build Status](https://secure.travis-ci.org/sebastianseilund/node-json-socket.png?branch=master)](https://travis-ci.org/sebastianseilund/node-json-socket)
 
-`JsonSocket` is a very easy way to send JSON over TCP using sockets. `JsonSocket` uses a [decorator pattern](http://en.wikipedia.org/wiki/Decorator_pattern)
+`JsonSocket` is a very easy way to send JSON over a socket using either TCP or UNIX sockets. `JsonSocket` uses a [decorator pattern](http://en.wikipedia.org/wiki/Decorator_pattern)
 to expose extra methods and events on instances of [`net.Socket`](http://nodejs.org/api/net.html#net_class_net_socket).
 These methods and events makes it straightforward to send bidirectional JSON messages of any kind and size.
 
