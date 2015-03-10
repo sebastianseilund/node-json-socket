@@ -1,5 +1,5 @@
 var net = require('net'),
-    JsonSocket = require('./lib/json-socket');
+    JsonSocket = require('../lib/json-socket');
 
 var port = 9838;
 var server = net.createServer();
