@@ -29,7 +29,6 @@
         "async": "0.1.x"
     },
     "scripts": {
-        "test": "./node_modules/.bin/mocha $(shell find test -name '*.test.js')",
-        "watch-test": "./node_modules/.bin/mocha $(shell find test -name '*.test.js') --watch --growl"
+        "test": "./node_modules/.bin/mocha $(shell find test -name '*.test.js')"
     }
 }
