@@ -8,7 +8,7 @@ server.on('connection', function(socket) {
     socket = new JsonSocket(socket);
     var n;
     var isRunning = false;
-    var streatTimeout;
+    var streamInterval;
     socket.on('message', function(message) {
         if (message.command == 'start') {
             if (!isRunning) {
