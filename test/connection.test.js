@@ -4,30 +4,30 @@ var assert = require('assert'),
     JsonSocket = require('../lib/json-socket'),
     helpers = require('./helpers');
 
-describe('JsonSocket connection', function() {
+describe('JsonSocket connection', function () {
 
-    it('should connect, send and receive message', function(callback) {
-        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+    it('should connect, send and receive message', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             assert.equal(clientSocket.isClosed(), false);
             assert.equal(serverSocket.isClosed(), false);
             async.parallel([
-                function(callback) {
+                function (callback) {
                     clientSocket.sendMessage({type: 'ping'}, callback);
                 },
-                function(callback) {
-                    clientSocket.on('message', function(message) {
+                function (callback) {
+                    clientSocket.on('message', function (message) {
                         assert.deepEqual(message, {type: 'pong'});
                         callback();
                     });
                 },
-                function(callback) {
-                    serverSocket.on('message', function(message) {
+                function (callback) {
+                    serverSocket.on('message', function (message) {
                         assert.deepEqual(message, {type: 'ping'});
                         serverSocket.sendMessage({type: 'pong'}, callback);
                     });
                 }
-            ], function(err) {
+            ], function (err) {
                 if (err) return callback(err);
                 assert.equal(clientSocket.isClosed(), false);
                 assert.equal(serverSocket.isClosed(), false);
@@ -36,18 +36,18 @@ describe('JsonSocket connection', function() {
         });
     });
 
-    it('should send multiple messages', function(callback) {
-        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+    it('should send multiple messages', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             async.parallel([
-                function(callback) {
-                    async.forEach(helpers.range(1, 100), function(i, callback) {
+                function (callback) {
+                    async.forEach(helpers.range(1, 100), function (i, callback) {
                         clientSocket.sendMessage({number: i}, callback);
                     }, callback);
                 },
-                function(callback) {
+                function (callback) {
                     var lastNumber = 0;
-                    serverSocket.on('message', function(message) {
+                    serverSocket.on('message', function (message) {
                         assert.deepEqual(message.number, lastNumber + 1);
                         lastNumber = message.number;
                         if (lastNumber == 100) {
@@ -55,29 +55,29 @@ describe('JsonSocket connection', function() {
                         }
                     });
                 }
-            ], function(err) {
+            ], function (err) {
                 if (err) return callback(err);
                 helpers.closeServer(server, callback);
             });
         });
     });
 
-    it('should send end message', function(callback) {
-        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+    it('should send end message', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             async.parallel([
-                function(callback) {
-                    clientSocket.sendEndMessage({type: 'ping'}, function(err) {
+                function (callback) {
+                    clientSocket.sendEndMessage({type: 'ping'}, function (err) {
                         callback(err);
                     });
                 },
-                function(callback) {
-                    serverSocket.on('message', function(message) {
+                function (callback) {
+                    serverSocket.on('message', function (message) {
                         assert.deepEqual(message, {type: 'ping'});
                         setTimeout(callback, 10);
                     });
                 }
-            ], function(err) {
+            ], function (err) {
                 if (err) return callback(err);
                 assert.equal(clientSocket.isClosed(), true);
                 assert.equal(serverSocket.isClosed(), true);
@@ -86,40 +86,70 @@ describe('JsonSocket connection', function() {
         });
     });
 
-    it('should return true for isClosed() when server disconnects', function(callback) {
-        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+    it('should return true for isClosed() when server disconnects', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             async.series([
-                function(callback) {
+                function (callback) {
                     serverSocket.end();
                     setTimeout(callback, 10);
                 },
-                function(callback) {
+                function (callback) {
                     assert.equal(clientSocket.isClosed(), true);
                     assert.equal(serverSocket.isClosed(), true);
                     callback();
                 }
-            ], function(err) {
+            ], function (err) {
                 if (err) return callback(err);
                 helpers.closeServer(server, callback);
             });
         });
     });
 
-    it('should return true for isClosed() when client disconnects', function(callback) {
-        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+    it('should return true for isClosed() when client disconnects', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             async.series([
-                function(callback) {
+                function (callback) {
                     clientSocket.end();
                     setTimeout(callback, 10);
                 },
-                function(callback) {
+                function (callback) {
                     assert.equal(clientSocket.isClosed(), true);
                     assert.equal(serverSocket.isClosed(), true);
                     callback();
                 }
-            ], function(err) {
+            ], function (err) {
+                if (err) return callback(err);
+                helpers.closeServer(server, callback);
+            });
+        });
+    });
+
+    it('send bulk messages through deferred', function (callback) {
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
+            if (err) return callback(err);
+            async.parallel([
+                function (callback) {
+                    async.forEach(helpers.range(1, 9999), function (i, callback) {
+                        clientSocket.sendDeferred({number: i});
+                        if (i === 9999) {
+                            clientSocket.sendDeferred({number: 10000}, true);
+                        }
+                        callback();
+                    }, callback);
+                },
+                function (callback) {
+                    serverSocket.statistics();
+                    var lastNumber = 0;
+                    serverSocket.on('message', function () {
+                        lastNumber++;
+                        if (lastNumber == 10000) {
+                            callback();
+                        }
+                    });
+                }
+            ], function (err) {
                 if (err) return callback(err);
                 helpers.closeServer(server, callback);
             });
