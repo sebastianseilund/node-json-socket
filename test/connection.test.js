@@ -131,15 +131,6 @@ describe('JsonSocket connection', function () {
             if (err) return callback(err);
             async.parallel([
                 function (callback) {
-                    async.forEach(helpers.range(1, 9999), function (i, callback) {
-                        clientSocket.sendDeferred({number: i});
-                        if (i === 9999) {
-                            clientSocket.sendDeferred({number: 10000}, true);
-                        }
-                        callback();
-                    }, callback);
-                },
-                function (callback) {
                     serverSocket.statistics();
                     var lastNumber = 0;
                     serverSocket.on('message', function () {
@@ -148,6 +139,43 @@ describe('JsonSocket connection', function () {
                             callback();
                         }
                     });
+                },
+                function (callback) {
+                    async.forEach(helpers.range(1, 9999), function (i, callback) {
+                        clientSocket.sendDeferred({number: i});
+                        if (i === 9999) {
+                            clientSocket.sendDeferred({number: 10000}, true);
+                        }
+                        callback();
+                    }, callback);
+                }
+            ], function (err) {
+                if (err) return callback(err);
+                helpers.closeServer(server, callback);
+            });
+        });
+    });
+
+    it('send bulk messages through deferred with auto flush', function (callback) {
+        console.log('ici');
+        helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
+            if (err) return callback(err);
+            async.parallel([
+                function (callback) {
+                    serverSocket.statistics();
+                    var lastNumber = 0;
+                    serverSocket.on('message', function (message) {
+                        lastNumber++;
+                        if (lastNumber == 10) {
+                            callback();
+                        }
+                    });
+                },
+                function (callback) {
+                    async.forEach(helpers.range(1, 10), function (i, callback) {
+                        clientSocket.sendDeferred({number: i});
+                        callback();
+                    }, callback);
                 }
             ], function (err) {
                 if (err) return callback(err);
