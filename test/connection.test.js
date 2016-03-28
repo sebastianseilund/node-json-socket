@@ -157,7 +157,6 @@ describe('JsonSocket connection', function () {
     });
 
     it('send bulk messages through deferred with auto flush', function (callback) {
-        console.log('ici');
         helpers.createServerAndClient(function (err, server, clientSocket, serverSocket) {
             if (err) return callback(err);
             async.parallel([
@@ -172,6 +171,7 @@ describe('JsonSocket connection', function () {
                     });
                 },
                 function (callback) {
+                    clientSocket.autoFlush();
                     async.forEach(helpers.range(1, 10), function (i, callback) {
                         clientSocket.sendDeferred({number: i});
                         callback();
