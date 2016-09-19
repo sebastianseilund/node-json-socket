@@ -1,32 +1,34 @@
 {
-    "name": "json-socket",
-    "description": "An easy way to send JSON over TCP using sockets.",
-    "main": "./lib/json-socket",
-    "author": "Sebastian Seilund",
-    "version": "0.1.2",
-    "repository" : {
-        "type" : "git",
-        "url" : "http://github.com/sebastianseilund/node-json-socket.git"
-    },
-    "bugs" : {
-        "url" : "http://github.com/sebastianseilund/node-json-socket/issues"
-    },
-    "maintainers": [{
-        "name": "Sebastian Seilund",
-        "email": "sebastian@seilund.com",
-        "url": "http://www.sebastianseilund.com"
-    }],
-    "licenses" : [
-        {
-            "type" : "MIT",
-            "url" : "http://github.com/sebastianseilund/node-json-socket/raw/master/LICENSE"
-        }
-    ],
-    "devDependencies": {
-        "mocha": "*",
-        "async": "0.1.x"
-    },
-    "scripts": {
-        "test": "./node_modules/.bin/mocha $(shell find test -name '*.test.js')"
+  "name": "json-socket",
+  "description": "An easy way to send JSON over TCP using sockets.",
+  "main": "./lib/json-socket",
+  "author": "Sebastian Seilund",
+  "version": "0.1.2",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/sebastianseilund/node-json-socket.git"
+  },
+  "bugs": {
+    "url": "http://github.com/sebastianseilund/node-json-socket/issues"
+  },
+  "maintainers": [
+    {
+      "name": "Sebastian Seilund",
+      "email": "sebastian@seilund.com",
+      "url": "http://www.sebastianseilund.com"
     }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/sebastianseilund/node-json-socket/raw/master/LICENSE"
+    }
+  ],
+  "devDependencies": {
+    "async": "^2.0.1",
+    "mocha": "^3.0.2"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --recursive test"
+  }
 }
