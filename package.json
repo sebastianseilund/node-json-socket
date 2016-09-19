@@ -23,9 +23,7 @@
         }
     ],
     "devDependencies": {
-        "mocha": "*"
-    },
-    "dependencies": {
+        "mocha": "*",
         "async": "0.1.x"
     },
     "scripts": {
