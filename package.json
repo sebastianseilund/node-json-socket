@@ -3,7 +3,7 @@
   "description": "An easy way to send JSON over TCP using sockets.",
   "main": "./lib/json-socket",
   "author": "Sebastian Seilund",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "http://github.com/sebastianseilund/node-json-socket.git"
