@@ -2,7 +2,8 @@ var assert = require('assert'),
     async = require('async'),
     net = require('net'),
     JsonSocket = require('../lib/json-socket'),
-    helpers = require('./helpers');
+    helpers = require('./helpers'),
+    longPayload = require('./data/long-payload-with-special-chars.json');
 
 describe('JsonSocket connection', function() {
 
@@ -24,6 +25,36 @@ describe('JsonSocket connection', function() {
                 function(callback) {
                     serverSocket.on('message', function(message) {
                         assert.deepEqual(message, {type: 'ping'});
+                        serverSocket.sendMessage({type: 'pong'}, callback);
+                    });
+                }
+            ], function(err) {
+                if (err) return callback(err);
+                assert.equal(clientSocket.isClosed(), false);
+                assert.equal(serverSocket.isClosed(), false);
+                helpers.closeServer(server, callback);
+            });
+        });
+    });
+
+    it('should send long messages with special characters without issue', function(callback) {
+        helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
+            if (err) return callback(err);
+            assert.equal(clientSocket.isClosed(), false);
+            assert.equal(serverSocket.isClosed(), false);
+            async.parallel([
+                function(callback) {
+                    clientSocket.sendMessage(longPayload, callback);
+                },
+                function(callback) {
+                    clientSocket.on('message', function(message) {
+                        assert.deepEqual(message, {type: 'pong'});
+                        callback();
+                    });
+                },
+                function(callback) {
+                    serverSocket.on('message', function(message) {
+                        assert.deepEqual(message, longPayload);
                         serverSocket.sendMessage({type: 'pong'}, callback);
                     });
                 }
