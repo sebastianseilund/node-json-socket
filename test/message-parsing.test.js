@@ -76,6 +76,14 @@ describe('JsonSocket message parsing', function() {
         assert.equal(socket._buffer, '');
     });
 
+    it('should parse chunked messages with multi-byte characters', function() {
+        // 0x33 0x23 0xd8 0x22 0xa9 0x22 = 3#"ة" (U+00629)
+        socket._onData(new Buffer([0x33, 0x23, 0x22, 0xd8]));
+        socket._onData(new Buffer([0xa9, 0x22]));
+        assert.equal(messages.length, 1);
+        assert.equal(messages[0], 'ة');
+    });
+
     it('should fail to parse invalid JSON', function() {
         try {
             socket._handleData('4#"Hel');
