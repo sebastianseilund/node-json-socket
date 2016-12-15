@@ -156,6 +156,35 @@ describe('JsonSocket connection', function() {
         });
     });
 
+    it('should return true for isClosed() when client (re)connects', function(done) {
+        var server = net.createServer();
+        server.listen();
+        server.on('listening', function() {
+            var clientSocket = new JsonSocket(new net.Socket());
+
+            server.once('connection', function(socket) {
+                var serverSocket = new JsonSocket(socket);
+                serverSocket.on('end', function() {
+                    setTimeout(function() {
+                        assert.equal(serverSocket.isClosed(), true);
+                        assert.equal(clientSocket.isClosed(), true);
+                        clientSocket.on('connect', function() {
+                            setTimeout(function() {
+                                assert.equal(clientSocket.isClosed(), false);
+                                done();
+                            }, 10);
+                        });
+                        clientSocket.connect(server.address().port, '127.0.0.1');
+                    }, 10);
+                });
+
+                clientSocket.end();
+            });
+
+            clientSocket.connect(server.address().port, '127.0.0.1');
+        });        
+    });
+
 //    it('should buffer message if sent before connected', function(callback) {
 //        helpers.createServer(function(err, server) {
 //            if (err) return callback(err);
