@@ -5,9 +5,9 @@ var assert = require('assert'),
 
 describe('JsonSocket shortcuts', function() {
 
-    it('should send single message', function(callback) {
+    it('should send single message', function(done) {
         helpers.createServer(function(err, server) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.parallel([
                 function(callback) {
                     server.on('connection', function(socket) {
@@ -26,15 +26,15 @@ describe('JsonSocket shortcuts', function() {
                     JsonSocket.sendSingleMessage(server.address().port, server.address().host, {type: 'ping'}, callback);
                 }
             ], function(err) {
-                if (err) return callback(err);
-                helpers.closeServer(server, callback);
+                if (err) return done(err);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should send single message and receive', function(callback) {
+    it('should send single message and receive', function(done) {
         helpers.createServer(function(err, server) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.parallel([
                 function(callback) {
                     server.on('connection', function(socket) {
@@ -57,8 +57,8 @@ describe('JsonSocket shortcuts', function() {
                     });
                 }
             ], function(err) {
-                if (err) return callback(err);
-                helpers.closeServer(server, callback);
+                if (err) return done(err);
+                helpers.closeServer(server, done);
             });
         });
     });

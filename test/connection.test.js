@@ -6,10 +6,9 @@ var assert = require('assert'),
     longPayload = require('./data/long-payload-with-special-chars.json');
 
 describe('JsonSocket connection', function() {
-
-    it('should connect, send and receive message', function(callback) {
+    it('should connect, send and receive message', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             assert.equal(clientSocket.isClosed(), false);
             assert.equal(serverSocket.isClosed(), false);
             async.parallel([
@@ -29,17 +28,17 @@ describe('JsonSocket connection', function() {
                     });
                 }
             ], function(err) {
-                if (err) return callback(err);
+                if (err) return done(err);
                 assert.equal(clientSocket.isClosed(), false);
                 assert.equal(serverSocket.isClosed(), false);
-                helpers.closeServer(server, callback);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should send long messages with special characters without issue', function(callback) {
+    it('should send long messages with special characters without issues', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             assert.equal(clientSocket.isClosed(), false);
             assert.equal(serverSocket.isClosed(), false);
             async.parallel([
@@ -59,17 +58,17 @@ describe('JsonSocket connection', function() {
                     });
                 }
             ], function(err) {
-                if (err) return callback(err);
+                if (err) return done(err);
                 assert.equal(clientSocket.isClosed(), false);
                 assert.equal(serverSocket.isClosed(), false);
-                helpers.closeServer(server, callback);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should send multiple messages', function(callback) {
+    it('should send multiple messages', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.parallel([
                 function(callback) {
                     async.forEach(helpers.range(1, 100), function(i, callback) {
@@ -87,15 +86,15 @@ describe('JsonSocket connection', function() {
                     });
                 }
             ], function(err) {
-                if (err) return callback(err);
-                helpers.closeServer(server, callback);
+                if (err) return done(err);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should send end message', function(callback) {
+    it('should send end message', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.parallel([
                 function(callback) {
                     clientSocket.sendEndMessage({type: 'ping'}, function(err) {
@@ -109,17 +108,17 @@ describe('JsonSocket connection', function() {
                     });
                 }
             ], function(err) {
-                if (err) return callback(err);
+                if (err) return done(err);
                 assert.equal(clientSocket.isClosed(), true);
                 assert.equal(serverSocket.isClosed(), true);
-                helpers.closeServer(server, callback);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should return true for isClosed() when server disconnects', function(callback) {
+    it('should return true for isClosed() when server disconnects', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.series([
                 function(callback) {
                     serverSocket.end();
@@ -131,15 +130,15 @@ describe('JsonSocket connection', function() {
                     callback();
                 }
             ], function(err) {
-                if (err) return callback(err);
-                helpers.closeServer(server, callback);
+                if (err) return done(err);
+                helpers.closeServer(server, done);
             });
         });
     });
 
-    it('should return true for isClosed() when client disconnects', function(callback) {
+    it('should return true for isClosed() when client disconnects', function(done) {
         helpers.createServerAndClient(function(err, server, clientSocket, serverSocket) {
-            if (err) return callback(err);
+            if (err) return done(err);
             async.series([
                 function(callback) {
                     clientSocket.end();
@@ -151,8 +150,8 @@ describe('JsonSocket connection', function() {
                     callback();
                 }
             ], function(err) {
-                if (err) return callback(err);
-                helpers.closeServer(server, callback);
+                if (err) return done(err);
+                helpers.closeServer(server, done);
             });
         });
     });
