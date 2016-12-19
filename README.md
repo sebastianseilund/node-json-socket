@@ -276,7 +276,7 @@ Will send a message of this JSON format:
 ```json
 {
     "success": false,
-    "message": "Something went wrong"
+    "error": "Something went wrong"
 }
 ```
 
