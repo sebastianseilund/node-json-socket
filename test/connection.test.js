@@ -219,7 +219,7 @@ describe('JsonSocket connection', function() {
         });
     });
 
-    it('should send message when forth argument sendSingleMessageAndReceive is function', function (done) {
+    it('should send and receive message when forth argument sendSingleMessageAndReceive is function', function (done) {
       var server = net.createServer();
       server.listen();
       server.on('listening', function() {
@@ -227,14 +227,17 @@ describe('JsonSocket connection', function() {
               var serverSocket = new JsonSocket(socket);
               serverSocket.on('message', function(message) {
                   assert.equal(message, 'test');
-                  done();
+                  serverSocket.sendMessage('test');
               });
           });
-          JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', function(message){});
+        });
+        JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', function(err, message){
+            assert.equal(message, 'test')
+            done();
         });
     });
 
-    it('should send message when forth argument sendSingleMessageAndReceive is object with custom delimeter', function (done) {
+    it('should send and receive message when forth argument sendSingleMessageAndReceive is object with custom delimeter', function (done) {
       var server = net.createServer();
       server.listen();
       server.on('listening', function() {
@@ -242,10 +245,13 @@ describe('JsonSocket connection', function() {
               var serverSocket = new JsonSocket(socket, { delimeter: "¡"});
               serverSocket.on('message', function(message) {
                   assert.equal(message, 'test');
-                  done();
+                  serverSocket.sendMessage('test');
               });
           });
-          JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', { delimeter: "¡"}, function(message){});
+          JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', { delimeter: "¡"}, function(err, message){
+              assert.equal(message, 'test')
+              done();
+          });
         });
     });
 
