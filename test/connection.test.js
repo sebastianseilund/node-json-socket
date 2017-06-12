@@ -182,7 +182,77 @@ describe('JsonSocket connection', function() {
             });
 
             clientSocket.connect(server.address().port, '127.0.0.1');
-        });        
+        });
+    });
+
+    it('should send message when forth argument sendSingleMessage is function', function (done) {
+        var server = net.createServer();
+        server.listen();
+        server.on('listening', function() {
+            server.once('connection', function(socket) {
+                var serverSocket = new JsonSocket(socket);
+                serverSocket.on('message', function(message) {
+                    assert.equal(message, 'test');
+                });
+            });
+            JsonSocket.sendSingleMessage(server.address().port, '127.0.0.1', 'test', function(err){
+                assert.equal(err, null);
+                done();
+            });
+        });
+    });
+
+    it('should send message when forth argument sendSingleMessage is object with custom delimeter', function (done) {
+        var server = net.createServer();
+        server.listen();
+        server.on('listening', function() {
+            server.once('connection', function(socket) {
+                var serverSocket = new JsonSocket(socket, { delimeter: "¡"});
+                serverSocket.on('message', function(message) {
+                    assert.equal(message, 'test');
+                });
+            });
+            JsonSocket.sendSingleMessage(server.address().port, '127.0.0.1', 'test', { delimeter: "¡"}, function(err){
+                assert.equal(err, null);
+                done();
+            });
+        });
+    });
+
+    it('should send and receive message when forth argument sendSingleMessageAndReceive is function', function (done) {
+      var server = net.createServer();
+      server.listen();
+      server.on('listening', function() {
+          server.on('connection', function(socket) {
+              var serverSocket = new JsonSocket(socket);
+              serverSocket.on('message', function(message) {
+                  assert.equal(message, 'test');
+                  serverSocket.sendMessage('test');
+              });
+          });
+        });
+        JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', function(err, message){
+            assert.equal(message, 'test')
+            done();
+        });
+    });
+
+    it('should send and receive message when forth argument sendSingleMessageAndReceive is object with custom delimeter', function (done) {
+      var server = net.createServer();
+      server.listen();
+      server.on('listening', function() {
+          server.on('connection', function(socket) {
+              var serverSocket = new JsonSocket(socket, { delimeter: "¡"});
+              serverSocket.on('message', function(message) {
+                  assert.equal(message, 'test');
+                  serverSocket.sendMessage('test');
+              });
+          });
+          JsonSocket.sendSingleMessageAndReceive(server.address().port, '127.0.0.1', 'test', { delimeter: "¡"}, function(err, message){
+              assert.equal(message, 'test')
+              done();
+          });
+        });
     });
 
 //    it('should buffer message if sent before connected', function(callback) {
