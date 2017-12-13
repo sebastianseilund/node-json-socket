@@ -215,7 +215,7 @@ Sends a single message anc close the connection instantly.
 __Arguments__
 
 - port - Port to send the message to.
-- most - Host to send the message to.
+- host - Host to send the message to.
 - message - The message to send.
 - callback(err) - Will be called when the message has been sent.
 
