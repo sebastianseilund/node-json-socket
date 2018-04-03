@@ -104,12 +104,12 @@ describe('JsonSocket message parsing', function() {
         assert.equal(socket._buffer, '');
     });
 
-    it('should format message with byte length', function () {
+    it('should format message with string length', function () {
         var message = socket._formatMessageData("Please take out the søppel");
         var i = message.indexOf('#');
         var rawContentLength = message.substring(0, i);
         var contentLength = parseInt(rawContentLength);
-        assert.equal(contentLength, 29);
+        assert.equal(contentLength, 28);
         socket._handleData(message);
         assert.equal(messages[0], 'Please take out the søppel');
         assert.equal(socket._buffer, '');
@@ -236,12 +236,12 @@ describe('JsonSocket message parsing with custom delimeter', function() {
         assert.equal(socket._buffer, '');
     });
 
-    it('should format message with byte length', function () {
+    it('should format message with string length', function () {
         var message = socket._formatMessageData("Please take out the søppel");
         var i = message.indexOf(socket._opts.delimeter);
         var rawContentLength = message.substring(0, i);
         var contentLength = parseInt(rawContentLength);
-        assert.equal(contentLength, 29);
+        assert.equal(contentLength, 28);
         socket._handleData(message);
         assert.equal(messages[0], 'Please take out the søppel');
         assert.equal(socket._buffer, '');
