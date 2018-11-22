@@ -7,7 +7,7 @@ These methods and events makes it straightforward to send bidirectional JSON mes
 
 ## Installation
 
-You can install `JsonSocket` using Node Package Manager (npm): 
+You can install `JsonSocket` using Node Package Manager (npm):
 
 ```
 npm install json-socket
@@ -210,7 +210,7 @@ Besides that the following methods and events are also available on `JsonSocket`
 
 ### JsonSocket.sendSingleMessage(port, host, message, callback)
 
-Sends a single message anc close the connection instantly.
+Sends a single message and close the connection instantly.
 
 __Arguments__
 
@@ -249,7 +249,7 @@ __Arguments__
 
 ### socket.sendEndMessage(message, callback)
 
-Same as `socket.sendMessage`, except that the socket is closed right after the message has been sent using 
+Same as `socket.sendMessage`, except that the socket is closed right after the message has been sent using
 [`net.end()`](http://nodejs.org/api/net.html#net_socket_end_data_encoding).
 
 No more messages can be sent from either the server or client through this socket.
@@ -258,7 +258,7 @@ No more messages can be sent from either the server or client through this socke
 
 ### socket.sendError(err, callback)
 
-Convenience method for sending an error as a message. 
+Convenience method for sending an error as a message.
 
 __Arguments__
 
@@ -284,7 +284,7 @@ Will send a message of this JSON format:
 
 ### socket.sendEndError(err, callback)
 
-Same as `socket.sendError`, except that the socket is closed right after the message has been sent using 
+Same as `socket.sendError`, except that the socket is closed right after the message has been sent using
 [`net.end()`](http://nodejs.org/api/net.html#net_socket_end_data_encoding).
 
 No more messages can be sent from either the server or client through this socket.
