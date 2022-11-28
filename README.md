@@ -310,6 +310,8 @@ Emitted when a complete message has been received.
 
 The `JsonSocket` protocol works by `JSON.stringify`'ing the message and prefixing it with a content length and a content length delimiter (#).
 
+You can change the content length delimiter to custom by passing an object when creating JsonSocket object: `new JsonSocket(new net.Socket(), { delimeter:  "$"})`.
+
 Example:
 
 ```javascript
