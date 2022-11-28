@@ -1,5 +1,7 @@
 # JsonSocket [![Build Status](https://secure.travis-ci.org/sebastianseilund/node-json-socket.png?branch=master)](https://travis-ci.org/sebastianseilund/node-json-socket)
 
+**NO LONGER MAINTAINED:** This package is no longer maintained. If you'd like to run a fork, please publish to npm under a new name and submit a PR to this repo with a link to your package.
+
 `JsonSocket` is a very easy way to send JSON over a socket using either TCP or UNIX sockets. `JsonSocket` uses a [decorator pattern](http://en.wikipedia.org/wiki/Decorator_pattern)
 to expose extra methods and events on instances of [`net.Socket`](http://nodejs.org/api/net.html#net_class_net_socket).
 These methods and events makes it straightforward to send bidirectional JSON messages of any kind and size.
